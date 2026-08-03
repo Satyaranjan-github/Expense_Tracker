@@ -11,7 +11,10 @@ export const transactionsApi = apiSlice.injectEndpoints({
             invalidatesTags: ["Transactions"]
         }),
         getTransactions: builder.query({
-            query: () => '/transactions/get-transactions',
+            query: (type) => ({
+                url: '/transactions/get-transactions',
+                params: { type },
+            }),
             providesTags: ["Transactions"]
         }),
         updateTransaction: builder.mutation({

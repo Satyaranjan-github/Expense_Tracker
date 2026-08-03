@@ -16,6 +16,6 @@ export const apiSlice = createApi({
             return headers;
         },
     }),
-    tagTypes: ['Transactions'], // Define all global tags here
+    tagTypes: ['Transactions',"Category"], // Define all global tags here
     endpoints: () => ({}), // Leave this completely empty!
 });

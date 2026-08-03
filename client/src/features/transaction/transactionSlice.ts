@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { ITransaction } from "../types/transaction";
+import type { ITransaction } from "../../types/transaction";
 
 interface TransactionState {
     transactions: ITransaction[]

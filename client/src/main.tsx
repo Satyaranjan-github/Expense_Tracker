@@ -5,9 +5,9 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { store } from './app/store';
+import LoadingModal from './common/utils/LoadingModal';
+import { LoadingProvider } from './common/utils/LoadingProvider';
 import './index.css';
-import LoadingModal from './utils/LoadingModal';
-import { LoadingProvider } from './utils/LoadingProvider';
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
