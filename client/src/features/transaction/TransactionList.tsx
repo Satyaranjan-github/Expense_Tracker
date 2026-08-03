@@ -1,26 +1,27 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useGetTransactionsQuery } from '../api/transactionApi';
-import { type ITransaction } from '../types/transaction';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useGetTransactionsQuery } from '../../api/transactionApi';
+import { TransactionInput, type ITransaction } from '../../types/transaction';
 import TransactionFormModal from './TransactionFormModal';
 
-export default function TransactionsView() {
+export default function TransactionList() {
     const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+    const location = useLocation();
+    const type = location.pathname.includes('expense') ? TransactionInput.Expense : TransactionInput.Income;
 
-    const { data: transactions, isLoading } = useGetTransactionsQuery(undefined)
+    const { data: transactions, isLoading } = useGetTransactionsQuery(type);
+
     const navigate = useNavigate();
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-in fade-in duration-200">
+        <div className="max-w-7xl mx-auto space-y-6 animate-in fade-in duration-200">
 
-            {/* SECTION CONTAINER HEADER ROW */}
             <div className="flex items-center justify-between bg-white p-6 border border-orange-100 rounded-2xl shadow-sm">
                 <div>
                     <h2 className="text-xl font-bold text-gray-900">Transaction History</h2>
                     <p className="text-sm text-gray-500 mt-0.5">Manage and inspect your logged financial items container rows.</p>
                 </div>
 
-                {/* ACTION TRIGGER BUTTON */}
                 <button
                     onClick={() => setIsFormOpen(true)}
                     className="px-4 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-semibold text-xs rounded-xl shadow-sm transition-colors flex items-center gap-2 whitespace-nowrap cursor-pointer"
@@ -32,7 +33,6 @@ export default function TransactionsView() {
                 </button>
             </div>
 
-            {/* CORE CARDS MAPPING GRID */}
             {isLoading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {[1, 2, 3].map((n) => (
@@ -77,7 +77,6 @@ export default function TransactionsView() {
                 </div>
             )}
 
-            {/* COMPONENT CREATION DIALOG BACKDROP (MODAL OVERLAY) */}
             {isFormOpen && (
                 <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
                     <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl relative animate-in fade-in zoom-in-95 duration-150 overflow-hidden">
@@ -91,7 +90,7 @@ export default function TransactionsView() {
                         </button>
                         <div className="p-1">
                             {/* Form implementation handles submission hooks directly */}
-                            <TransactionFormModal setOpenModal={setIsFormOpen} />
+                            <TransactionFormModal setOpenModal={setIsFormOpen} transactionData={{ type }} />
                         </div>
                     </div>
                 </div>

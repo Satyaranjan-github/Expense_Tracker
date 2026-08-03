@@ -1,10 +1,10 @@
 import { ArrowLeft, Calendar, CheckCircle2, CreditCard, Edit3, FileText, Receipt, Tag, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGetTransactionByIdQuery } from '../api/transactionApi';
-import TransactionFormModal from '../features/TransactionFormModal';
-import useTransactionOperations from '../features/useTransactionOperations';
-import { Status, TransactionInput, type ITransaction } from '../types/transaction';
+import { useGetTransactionByIdQuery } from '../../api/transactionApi';
+import { Status, TransactionInput, type ITransaction } from '../../types/transaction';
+import TransactionFormModal from './TransactionFormModal';
+import useTransactionOperations from './useTransactionOperations';
 
 export default function TransactionDetailsPage() {
     const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
@@ -21,12 +21,12 @@ export default function TransactionDetailsPage() {
         );
     }
 
+    const transactionData: ITransaction = transaction?.data
+    const isIncome = transactionData?.type === TransactionInput.Income;
+
     if (isError || !transaction) {
         return <div className="p-10 text-red-500">Transaction not found!</div>;
     }
-
-    const transactionData: ITransaction = transaction?.data
-    const isIncome = transactionData?.type === TransactionInput.Income;
 
     return (
         <div className="w-full bg-[#FCFBF7] border border-amber-900/10 rounded-2xl shadow-xs overflow-hidden relative font-sans text-neutral-800">
@@ -126,7 +126,7 @@ export default function TransactionDetailsPage() {
                     Update Transaction
                 </button>
                 <button
-                    onClick={() => deleteTransaction(transactionData._id)}
+                    onClick={() => deleteTransaction(transactionData._id as string)}
                     className="flex-1 inline-flex items-center justify-center gap-2 border border-neutral-200 text-neutral-500 hover:text-rose-600 hover:bg-rose-50/50 hover:border-rose-100 text-xs font-bold uppercase tracking-wider py-3 px-4 rounded-xl transition-all duration-150 cursor-pointer"
                 >
                     <Trash2 size={13} />

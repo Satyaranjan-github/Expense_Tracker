@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { TransactionInput } from "../types/transaction";
 import { getUserFromClerkId } from "../user/user.service";
 import { createTransaction, deleteTransaction, getTransactionById, getTransactions, updateTransaction } from "./transaction.service";
 
@@ -17,7 +18,9 @@ export const createTransactionController = async (req: Request, res: Response) =
 }
 
 export const getTransactionsController = async (req: Request, res: Response) => {
-    const result = await getTransactions();
+    const type = req.query.type as TransactionInput
+    const result = await getTransactions({type});
+
     return res.json({
         message: "Transactions fetched successfully",
         success: true,

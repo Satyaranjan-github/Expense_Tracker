@@ -1,9 +1,9 @@
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useCreateTransactionMutation, useDeleteTransactionMutation, useLazyGetTransactionsQuery, useUpdateTransactionMutation } from "../api/transactionApi";
-import useLoading from "../hooks/useLoading";
-import type { ITransaction } from "../types/transaction";
+import { useCreateTransactionMutation, useDeleteTransactionMutation, useLazyGetTransactionsQuery, useUpdateTransactionMutation } from "../../api/transactionApi";
+import useLoading from "../../common/hooks/useLoading";
+import type { ITransaction } from "../../types/transaction";
 import { clearSelectedTransaction, updateTransactionInList } from "./transactionSlice";
 
 function useTransactionOperations() {

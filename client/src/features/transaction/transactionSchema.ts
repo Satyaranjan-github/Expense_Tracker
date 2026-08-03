@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { PaymentMethod, Status, TransactionInput } from '../types/transaction';
+import { PaymentMethod, Status, TransactionInput } from '../../types/transaction';
 
-export const transactionValidationSchema = z.object({
+export const transactionValidationSchema= z.object({
     _id: z.string().optional(),
     user: z
         .string()

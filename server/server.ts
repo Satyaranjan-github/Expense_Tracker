@@ -4,6 +4,7 @@ dotenv.config();
 import { clerkMiddleware } from '@clerk/express';
 import cors from 'cors';
 import express, { type Request, type Response } from 'express';
+import categoriesRoute from './src/category/category.route';
 import { connectDB } from './src/config/db';
 import transactionRoutes from './src/transaction/transaction.route';
 import { ApiResponse } from './src/utils/ApiResponse';
@@ -44,6 +45,7 @@ app.use((err: any, req: any, res: any, next: any) => {
 });
 
 app.use("/api/transactions", transactionRoutes)
+app.use("/api/categories", categoriesRoute)
 
 app.get("/", (req, res) => {
     res.send("Hello World")

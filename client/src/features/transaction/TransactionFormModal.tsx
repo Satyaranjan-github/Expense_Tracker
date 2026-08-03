@@ -3,7 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Save, X } from "lucide-react";
 import { useEffect, type Dispatch, type SetStateAction } from 'react';
 import { useForm } from "react-hook-form";
-import { PaymentMethod, Status, TransactionInput, type ITransaction } from '../types/transaction';
+import { useParams } from 'react-router-dom';
+import { PaymentMethod, Status, TransactionInput, type ITransaction } from '../../types/transaction';
 import { transactionValidationSchema } from './transactionSchema';
 import useTransactionOperations from './useTransactionOperations';
 
@@ -11,10 +12,12 @@ const TransactionFormModal = (
     { setOpenModal, transactionData }:
         {
             setOpenModal: Dispatch<SetStateAction<boolean>>,
-            transactionData?: ITransaction
+            transactionData?: Partial<ITransaction>
         }
 ) => {
-    const { user } = useUser();
+    const { user, isLoaded, isSignedIn } = useUser();
+
+    console.log("Clerk State:", { isLoaded, isSignedIn, user });
     const {
         register,
         handleSubmit,
@@ -22,17 +25,18 @@ const TransactionFormModal = (
         formState: { errors }
     } =
         useForm<ITransaction>({
-            resolver: zodResolver(transactionValidationSchema),
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            resolver: zodResolver(transactionValidationSchema as any),
             mode: "onChange",
-            defaultValues: {
+            values: {
                 ...transactionData,
-                user: user?.id
-            }
+                user: user?.id || ""
+            } as ITransaction
         });
     const { createTransaction, updateTransaction } = useTransactionOperations()
-
+    const { id } = useParams()
     const onSubmit = async (data: ITransaction) => {
-        if (transactionData) {
+        if (id) {
             await updateTransaction(data)
             setOpenModal(false)
         } else {
@@ -43,20 +47,26 @@ const TransactionFormModal = (
 
     useEffect(() => {
         if (transactionData) {
-            const inputFriendlyDate = transactionData.date
-                ? new Date(transactionData.date).toISOString().split('T')[0]
-                : "";
 
             reset({
                 ...transactionData,
-                date: inputFriendlyDate
+                date: transactionData?.date ? new Date(transactionData.date) : new Date(),
+                user: user?.id || ""
             });
         }
-    }, [reset, transactionData])
+    }, [reset, transactionData, user?.id])
+
+    if (!isLoaded) {
+        return (
+            <div className="flex justify-center p-10">
+                <span className="loading loading-spinner text-primary">Loading ...</span>
+            </div>
+        );
+    }
 
     const inputFieldClass = "w-full border border-orange-100 bg-orange-50/10 rounded-xl p-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400 transition-all";
     const labelClass = "block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5";
-
+    console.log("Error->", errors)
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-xs p-4">
             <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden border border-orange-100 animate-in fade-in zoom-in-95 duration-150">
@@ -65,7 +75,7 @@ const TransactionFormModal = (
                     <div className="p-6 pb-4 border-b border-orange-50 flex items-center justify-between">
                         <div>
                             <h3 className="text-xl font-bold text-gray-900">
-                                {transactionData ? 'Update Transaction' : 'Add Transaction'}
+                                {id ? 'Update Transaction' : 'Add Transaction'}
                             </h3>
                             <p className="text-xs text-gray-400 mt-0.5">Log operational money stream movements variables.</p>
                         </div>
@@ -211,7 +221,7 @@ const TransactionFormModal = (
                             className="flex-1 bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm shadow-orange-600/10 transition-all cursor-pointer"
                         >
                             <Save size={14} />
-                            {transactionData ? "Update Transaction" : "Add Transaction"}
+                            {id ? "Update Transaction" : "Add Transaction"}
                         </button>
                     </div>
                 </form>

@@ -19,14 +19,14 @@ export enum PaymentMethod {
 }
 
 export interface ITransaction {
-    _id: string;
+    _id?: string;
     title: string;
     user: string;
     type: TransactionInput;
     paymentMethod: PaymentMethod;
     amount: number;
     category: string;
-    date: Date | string;
+    date: Date;
     description?: string;
     status: Status;
 }

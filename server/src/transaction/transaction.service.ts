@@ -1,12 +1,14 @@
-import type { ITransaction } from "../types/transaction";
+import type { ITransaction, TransactionInput } from "../types/transaction";
 import Transaction from "./transaction.model";
 
 export const createTransaction = (data: ITransaction) => {
     return Transaction.create(data);
 }
 
-export const getTransactions = async () => {
-    return await Transaction.find()
+export const getTransactions = async ({type}:{type:TransactionInput}) => {
+    return await Transaction.find({ 
+        type
+    }).sort({ createdAt: -1 });
 }
 
 export const getTransactionById = (id: string) => {
