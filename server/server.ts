@@ -9,6 +9,7 @@ import { connectDB } from './src/config/db';
 import transactionRoutes from './src/transaction/transaction.route';
 import { ApiResponse } from './src/utils/ApiResponse';
 import webhookRouter from "./src/utils/webhook.route";
+import morgan from 'morgan';
 
 connectDB();
 
@@ -21,6 +22,7 @@ app.use(cors({
     methods: ["GET", "POST", "PATCH", "DELETE"],
 }));
 
+app.use(morgan('dev'));
 app.use('/api', webhookRouter);
 
 app.use(express.json())
