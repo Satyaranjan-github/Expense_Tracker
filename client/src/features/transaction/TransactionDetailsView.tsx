@@ -33,7 +33,7 @@ export default function TransactionDetailsPage() {
             <div className="absolute inset-0 opacity-[0.015] pointer-events-none bg-[radial-gradient(#78350f_1px,transparent_1px)]" />
             <div className="p-6 pb-2 relative z-10 flex justify-between items-center">
                 <button
-                    onClick={() => navigate('/transactions')}
+                    onClick={() => navigate('/transactions/expense')}
                     className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-neutral-400 hover:text-neutral-900 transition-colors duration-150 cursor-pointer"
                 >
                     <ArrowLeft size={14} />
@@ -141,9 +141,7 @@ export default function TransactionDetailsPage() {
                             onClick={() => setIsFormOpen(false)}
                             className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 p-1.5 hover:bg-gray-100 rounded-xl transition-all z-10"
                         >
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
+                            <ArrowLeft size={16} />
                         </button>
                         <div className="p-1">
                             {/* Form implementation handles submission hooks directly */}

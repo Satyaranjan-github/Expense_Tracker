@@ -49,6 +49,12 @@ export const getCategoryByIdController = async (req: Request, res: Response) => 
 export const updateCategoryByController = async (req: Request, res: Response) => {
     const id = req.params.id as string
     const category = req.body
+
+    const user = await getUserFromClerkId(category.user as string);
+
+    if(!user) throw new Error("User not found");
+    category.user = user?._id
+
     const updatedCategory = await updateCategory(id, category)
 
     return res.json({
@@ -60,9 +66,8 @@ export const updateCategoryByController = async (req: Request, res: Response) =>
 
 export const deleteCategoryByController = async (req: Request, res: Response) => {
     const id = req.params.id as string
-    console.log("ID=>", id)
     const deletedCategory = await deleteCategory(id)
-    console.log("Deleted category=>", deletedCategory)
+
     return res.json({
         message: "Category deleted successfully",
         success: true,

@@ -5,7 +5,7 @@ import Category from "./category.model";
 export const createCategory = async (
     categoryData: ICategory, 
 ) => {
-    const generatedIcon = await getAutoIconWithAI(categoryData.icon);
+    const generatedIcon = await getAutoIconWithAI(categoryData.name);
 
     return await  Category.create({
         ...categoryData,
@@ -34,6 +34,5 @@ export const updateCategory = (id: string, data: Partial<ICategory>) => {
 
 export const deleteCategory = (id: string) => {
     if (!id) throw new Error("Invalid category id");
-
     return Category.findByIdAndDelete(id);
 }

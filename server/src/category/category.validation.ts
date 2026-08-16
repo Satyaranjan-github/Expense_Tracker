@@ -10,5 +10,4 @@ export const categoryValidationSchema = z.object({
         (val) => Object.values(CategoryType).includes(val),
         { message: "Invalid category type" }
     ),
-    icon:z.string().min(1, { message: "Category icon is required" }),
 })
