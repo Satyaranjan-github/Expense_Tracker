@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { TransactionInput } from "../types/transaction";
 import { getUserFromClerkId } from "../user/user.service";
 import { createTransaction, deleteTransaction, getTransactionById, getTransactions, updateTransaction } from "./transaction.service";
 
@@ -18,8 +17,7 @@ export const createTransactionController = async (req: Request, res: Response) =
 }
 
 export const getTransactionsController = async (req: Request, res: Response) => {
-    const type = req.query.type as TransactionInput
-    const result = await getTransactions({type});
+    const result = await getTransactions();
 
     return res.json({
         message: "Transactions fetched successfully",
@@ -54,9 +52,9 @@ export const updateTransactionByController = async (req: Request, res: Response)
 
 export const deleteTransactionByController = async (req: Request, res: Response) => {
     const id = req.params.id as string
-    console.log("ID=>", id)
+
     const deletedTransaction = await deleteTransaction(id)
-    console.log("Deleted transaction=>", deletedTransaction)
+
     return res.json({
         message: "Transaction deleted successfully",
         success: true,

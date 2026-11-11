@@ -1,7 +1,7 @@
 import { useUser } from "@clerk/clerk-react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Save, X } from "lucide-react"; // Assuming you use lucide-react for icons
-import type { Dispatch, SetStateAction } from "react";
+import { Save, X } from "lucide-react";
+import { useEffect, type Dispatch, type SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 import { CategoryType, type ICategory } from "../../types/category";
 import { categoryValidationSchema } from "./categorySchema";
@@ -13,11 +13,12 @@ interface CategoryFormModalProps {
 }
 
 const CategoryFormModal = ({ setOpenModal, categoryData }: CategoryFormModalProps) => {
-    const { user, isLoaded, isSignedIn } = useUser();
+    const { user, isLoaded } = useUser();
 
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors }
     } = useForm<ICategory>({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -41,16 +42,21 @@ const CategoryFormModal = ({ setOpenModal, categoryData }: CategoryFormModalProp
         }
     };
 
+    useEffect(() => {
+        if (categoryData) {
+            reset({
+                ...categoryData,
+                user: user?.id || ""
+            });
+        }
+    }, [reset, categoryData, user?.id])
+
     if (!isLoaded) {
         return (
             <div className="flex justify-center p-10">
                 <span className="loading loading-spinner text-primary">Loading ...</span>
             </div>
         );
-    }
-
-    if (!isSignedIn) {
-        return null;
     }
 
     const inputFieldClass = "w-full border border-orange-100 bg-orange-50/10 rounded-xl p-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400 transition-all";
@@ -93,29 +99,17 @@ const CategoryFormModal = ({ setOpenModal, categoryData }: CategoryFormModalProp
                             )}
                         </div>
                         <div className="pt-4">
-                            <label className={labelClass} htmlFor="type">Transaction Type</label>
+                            <label className={labelClass} htmlFor="type">Category Type</label>
                             <select {...register("type")} className={inputFieldClass}>
                                 <option value="">Select Category Type</option>
                                 {Object.values(CategoryType).map((type) => (
                                     <option key={type} value={type}>
-                                        {type}
+                                        {type.charAt(0).toUpperCase() + type.slice(1)}
                                     </option>
                                 ))}
                             </select>
                             {errors.type && (
                                 <span className="text-xs text-red-500 font-medium block mt-1">{errors.type.message}</span>
-                            )}
-                        </div>
-
-                        <div className="pt-0">
-                            <label className={labelClass} htmlFor="icon">Icon</label>
-                            <input
-                                {...register("icon")}
-                                placeholder="Enter icon name"
-                                className={inputFieldClass}
-                            />
-                            {errors.icon && (
-                                <span className="text-xs text-red-500 font-medium block mt-1">{errors.icon.message}</span>
                             )}
                         </div>
                     </div>

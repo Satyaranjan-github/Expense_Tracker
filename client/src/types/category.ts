@@ -6,11 +6,11 @@ export enum CategoryType{
 }
 
 export interface ICategory{
-    _id: string;
-    user: IUser | string;
+    _id?: string;
+    user?: IUser | string;
     name: string;
-    type: CategoryType;
-    icon:string;
-    createdAt: Date;
-    updatedAt: Date
+    type?: CategoryType;
+    icon?:string;
+    createdAt?: Date;
+    updatedAt?: Date
 }

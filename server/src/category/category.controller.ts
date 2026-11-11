@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { CategoryType } from "../types/category";
 import { getUserFromClerkId } from "../user/user.service";
-import { createCategory, deleteCategory, getAllCategories, getCategoryById, updateCategory } from "./category.service";
+import { categorySuggestions, createCategory, deleteCategory, getAllCategories, getCategoryById, updateCategory } from "./category.service";
 
 export const createCategoryController = async (req: Request, res: Response) => {
     const data = req.body
@@ -49,6 +49,12 @@ export const getCategoryByIdController = async (req: Request, res: Response) => 
 export const updateCategoryByController = async (req: Request, res: Response) => {
     const id = req.params.id as string
     const category = req.body
+
+    const user = await getUserFromClerkId(category.user as string);
+
+    if(!user) throw new Error("User not found");
+    category.user = user?._id
+
     const updatedCategory = await updateCategory(id, category)
 
     return res.json({
@@ -60,12 +66,22 @@ export const updateCategoryByController = async (req: Request, res: Response) =>
 
 export const deleteCategoryByController = async (req: Request, res: Response) => {
     const id = req.params.id as string
-    console.log("ID=>", id)
     const deletedCategory = await deleteCategory(id)
-    console.log("Deleted category=>", deletedCategory)
+
     return res.json({
         message: "Category deleted successfully",
         success: true,
         data: deletedCategory
     })
+}
+
+export const categorySuggestionsController = async (req: Request, res: Response) => {
+    const { query } = req.query;
+    const suggestions = await categorySuggestions(query as string);
+
+    res.status(200).json({
+        message: "Category Suggestions Fetched Successfully",
+        data: suggestions,
+        success: true
+    });
 }

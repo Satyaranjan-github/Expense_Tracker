@@ -35,7 +35,13 @@ export const categoriesApi = apiSlice.injectEndpoints({
                 method: 'PATCH'
             }),
             invalidatesTags: ["Category"]
-        })
+        }),
+        getCategorySuggestions: builder.query({
+            query: (query) => ({
+                url: '/categories/suggestions',
+                params: { query },
+            })
+        }),
     })
 })
 
@@ -46,5 +52,6 @@ export const {
     useLazyGetCategoryByIdQuery,
     useDeleteCategoryMutation,
     useGetCategoryByIdQuery,
-    useUpdateCategoryMutation
+    useUpdateCategoryMutation,
+    useLazyGetCategorySuggestionsQuery
 } = categoriesApi

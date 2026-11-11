@@ -2,6 +2,7 @@ import z from "zod";
 import { CategoryType } from "../../types/category";
 
 export const categoryValidationSchema = z.object({
+    _id: z.string().optional(),
     user: z
         .string()
         .min(1, { message: "User ID reference is required" }),
@@ -10,5 +11,4 @@ export const categoryValidationSchema = z.object({
         (val) => Object.values(CategoryType).includes(val),
         { message: "Invalid category type" }
     ),
-    icon:z.string().min(1, { message: "Category icon is required" }),
 })

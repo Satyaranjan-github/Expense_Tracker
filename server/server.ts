@@ -4,12 +4,12 @@ dotenv.config();
 import { clerkMiddleware } from '@clerk/express';
 import cors from 'cors';
 import express, { type Request, type Response } from 'express';
+import morgan from 'morgan';
 import categoriesRoute from './src/category/category.route';
 import { connectDB } from './src/config/db';
 import transactionRoutes from './src/transaction/transaction.route';
 import { ApiResponse } from './src/utils/ApiResponse';
 import webhookRouter from "./src/utils/webhook.route";
-import morgan from 'morgan';
 
 connectDB();
 

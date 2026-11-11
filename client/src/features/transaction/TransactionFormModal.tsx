@@ -15,9 +15,8 @@ const TransactionFormModal = (
             transactionData?: Partial<ITransaction>
         }
 ) => {
-    const { user, isLoaded, isSignedIn } = useUser();
+    const { user, isLoaded } = useUser();
 
-    console.log("Clerk State:", { isLoaded, isSignedIn, user });
     const {
         register,
         handleSubmit,
@@ -35,6 +34,7 @@ const TransactionFormModal = (
         });
     const { createTransaction, updateTransaction } = useTransactionOperations()
     const { id } = useParams()
+
     const onSubmit = async (data: ITransaction) => {
         if (id) {
             await updateTransaction(data)
@@ -67,6 +67,7 @@ const TransactionFormModal = (
     const inputFieldClass = "w-full border border-orange-100 bg-orange-50/10 rounded-xl p-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400 transition-all";
     const labelClass = "block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5";
     console.log("Error->", errors)
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-xs p-4">
             <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden border border-orange-100 animate-in fade-in zoom-in-95 duration-150">
