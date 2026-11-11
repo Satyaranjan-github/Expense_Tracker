@@ -36,3 +36,10 @@ export const deleteCategory = (id: string) => {
     if (!id) throw new Error("Invalid category id");
     return Category.findByIdAndDelete(id);
 }
+
+export const categorySuggestions = async (query: string) => {
+    return await Category.find({
+        name: { $regex: query, $options: "i" },
+        isDeleted: false
+    }).select("_id name");
+}

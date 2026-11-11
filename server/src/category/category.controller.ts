@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { CategoryType } from "../types/category";
 import { getUserFromClerkId } from "../user/user.service";
-import { createCategory, deleteCategory, getAllCategories, getCategoryById, updateCategory } from "./category.service";
+import { categorySuggestions, createCategory, deleteCategory, getAllCategories, getCategoryById, updateCategory } from "./category.service";
 
 export const createCategoryController = async (req: Request, res: Response) => {
     const data = req.body
@@ -73,4 +73,15 @@ export const deleteCategoryByController = async (req: Request, res: Response) =>
         success: true,
         data: deletedCategory
     })
+}
+
+export const categorySuggestionsController = async (req: Request, res: Response) => {
+    const { query } = req.query;
+    const suggestions = await categorySuggestions(query as string);
+
+    res.status(200).json({
+        message: "Category Suggestions Fetched Successfully",
+        data: suggestions,
+        success: true
+    });
 }
